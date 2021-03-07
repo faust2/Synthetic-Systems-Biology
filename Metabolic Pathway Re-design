@@ -1,0 +1,66 @@
+
+
+# https://link.springer.com/book/10.1007%2F978-3-030-29865-4
+# Data not directly included, please visit above link 
+# 
+
+import pandas as pd
+           
+df = pd.DataFrame(data, columns = ['Chassis', 'Media','Ori','STD','y[mg/l]'])
+print(df)
+
+import numpy as np
+import matplotlib as plt
+import tensorflow as tf
+import keras
+from keras.models import Sequential
+from keras.layers import Dense
+import sklearn
+import pandas as pd
+
+
+X=df.iloc[:,0:3]
+Y=df.iloc[:,4]
+Y=Y>20
+
+
+count = 0
+for col in X:
+    if X[col].dtype == 'object':
+        if len(list(X[col].unique())) <= 1:
+            ENC.fit(X[col])
+            X[col] = ENC.transform(X[col])
+            count += 1
+X = pd.get_dummies(X)
+
+from sklearn.model_selection import train_test_split
+X_train, X_test, Y_train, Y_test=train_test_split(X,Y,test_size=0.3)
+
+
+ENC = LabelEncoder()
+ENC.fit(Y)
+Y=ENC.transform(Y)
+
+import keras
+from keras.models import Sequential
+from keras.layers import Dense
+from keras.layers import Dropout
+classifier=Sequential()
+classifier.add(Dense(100, kernel_initializer='random_uniform', activation='relu', input_dim=8))
+classifier.add(Dense(200, kernel_initializer='random_uniform', activation='relu'))
+classifier.add(Dropout(0.2))
+classifier.add(Dense(100, kernel_initializer='random_uniform', activation='relu'))
+classifier.add(Dropout(0.2))
+classifier.add(Dense(1, kernel_initializer='random_uniform', activation='sigmoid'))
+classifier.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+classifier.fit(X_train, Y_train, batch_size=100, epochs=50)
+y_pred=classifier.predict(X_test)
+from sklearn.metrics import roc_auc_score
+print("ROC AUC score of the neural network classifier is:")
+print(roc_auc_score(Y_test, y_pred))
+
+
+
+
+
+
