@@ -1,0 +1,132 @@
+# Following the stoichiometric matrix for a description of 
+# glycolysis here: https://www.inf.ed.ac.uk/teaching/courses/csb/CSB_lecture_flux_balance_analysis.pdf?fbclid=IwAR1H80N3whQ63Bb3R8z8TZrGkMibN0EeOho6qqwcGF4BFp2wLiVpky4NFko
+
+import cobra
+from cobra import Model, Reaction, Metabolite
+
+model=Model('Glycolysis')
+
+# Reactions
+# To set a reaction as reversible, include lower_bound=None as an argument for that respective reaction
+reaction1 = Reaction('v1', name='v1')
+reaction2 = Reaction('v2', name='v2')
+reaction3 = Reaction('v3', name='v3')
+reaction4 = Reaction('v4', name='v4')
+reaction5 = Reaction('v5', name='v5')
+reaction6 = Reaction('v6', name='v6')
+reaction7 = Reaction('v7', name='v7')
+reaction8 = Reaction('v8', name='v8')
+
+
+# Metabolites
+ATP = Metabolite('ATP')
+ADP = Metabolite('ADP')
+AMP = Metabolite('AMP')
+Fruc6p = Metabolite('Fruc6p')
+Gluc6p = Metabolite('Gluc6p')
+Fruc16p2 = Metabolite('Fruc16p2')
+
+# Reactions
+
+reaction1.add_metabolites({
+    ATP: -1.0,
+    Gluc6p: 1.0,
+    ADP: 1.0
+})
+reaction1.reaction
+
+reaction2.add_metabolites({
+    Gluc6p: -1.0,
+    ATP: -1.0,
+    ADP: 1.0
+
+})
+reaction2.reaction
+
+
+reaction3.add_metabolites({
+    Gluc6p:-1.0,
+    Fruc6p: 1.0
+})
+reaction3.reaction
+
+reaction4.add_metabolites({
+    Fruc6p: -1.0,
+    ATP: -1.0,
+    Fruc16p2: 1.0,
+    ADP: 1.0
+})
+
+reaction4.reaction
+
+reaction5.add_metabolites({
+    Fruc16p2: -1.0
+})
+reaction5.reaction
+
+reaction6.add_metabolites({
+    ADP: -1.0,
+    ATP: 1.0
+})
+reaction6.reaction
+
+reaction7.add_metabolites({
+    ATP:-1.0,
+    ADP: 1.0
+})
+reaction7.reaction
+
+reaction8.add_metabolites({
+    ATP: -1.0,
+    AMP: -1.0,
+    ADP: 2.0
+})
+reaction8.reaction
+
+
+# The reactions are now added to the model itself
+model.add_reactions([reaction1])
+model.add_reactions([reaction2])
+model.add_reactions([reaction3])
+model.add_reactions([reaction4])
+model.add_reactions([reaction5])
+model.add_reactions([reaction6])
+model.add_reactions([reaction7])
+model.add_reactions([reaction8])
+
+
+model.objective = 'v6'
+
+print(model.objective.expression)
+print(model.objective.direction)
+
+import cobra.test
+
+# Conducting flux balance 
+
+solution = model.optimize()
+print(solution)
+solution.fluxes
+
+# Subsequent flux variability analysis, and then going on to use the geometric flux balance analysis feature of cobrapy
+
+from cobra.flux_analysis import flux_variability_analysis
+flux_variability_analysis(model, model.reactions[:8])
+geometric_fba_sol = cobra.flux_analysis.geometric_fba(model)
+geometric_fba_sol
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
