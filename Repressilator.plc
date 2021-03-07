@@ -1,0 +1,36 @@
+
+========================================================================
+
+// Differential equations without being non-dimensionalisd
+
+m1'=-K_m*m1+(y/(1+K_b*p0^n))+y0
+p1'=-K_p*p1+T*m1
+
+
+m2'=-K_m*m2+(y/(1+K_b*p1^n))+y0
+p2'=-K_p*p2+T*m2
+
+
+m3'=-K_m*m3+(y/(1+K_b*p2^n))+y0
+p3'=-K_p*p3+T*m3
+
+
+// defining y, y0, K_m, K_p, K_b, n and T. User may choose different values
+y=0.3
+y0=2.3
+K_m=3
+K_p=1
+K_b=0.5
+n=2
+T=12
+
+// initital values of m1-3, p1-3. Again, user may freely change
+m1=2
+m2=3
+m3=4
+p1=1
+p2=3
+p3=4
+p0=5
+
+========================================================================
